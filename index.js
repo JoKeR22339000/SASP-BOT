@@ -208,6 +208,13 @@ commands.push({
             ),
 
     async execute(interaction) {
+        
+        if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+    return interaction.reply({
+        content: "❌ Bu komutu kullanmak için Yönetici yetkisine sahip olmalısın.",
+        ephemeral: true
+    });
+}
 
         const embed =
             new EmbedBuilder()
