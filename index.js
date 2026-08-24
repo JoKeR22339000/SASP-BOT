@@ -18,6 +18,23 @@ const {
 const fs = require("fs");
 const path = require("path");
 
+const Database = require("better-sqlite3");
+
+const db = new Database(
+    path.join(__dirname, "database", "mesai.db")
+);
+
+db.pragma("journal_mode = WAL");
+
+db.exec(`
+    CREATE TABLE IF NOT EXISTS personeller (
+        id TEXT PRIMARY KEY,
+        toplamMesai INTEGER DEFAULT 0,
+        aktif INTEGER DEFAULT 0,
+        baslangic INTEGER DEFAULT NULL
+    )
+`);
+
 require("dotenv").config();
 
 
@@ -208,13 +225,6 @@ commands.push({
             ),
 
     async execute(interaction) {
-        
-        if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
-    return interaction.reply({
-        content: "❌ Bu komutu kullanmak için Yönetici yetkisine sahip olmalısın.",
-        ephemeral: true
-    });
-}
 
         const embed =
             new EmbedBuilder()
@@ -625,9 +635,6 @@ client.on(
                     )
                     .trim();
 
-
-            // FORMAT:
-            // 02 - Ithan Armando | SASP
 
             const format =
                 /^(\d+)\s*-\s*(.+?)\s*\|\s*(.+)$/;
@@ -1055,8 +1062,6 @@ client.on(
             });
 
 
-            // PERSONELE DM
-
             try {
 
                 const user =
@@ -1204,8 +1209,6 @@ client.on(
                     : "Bilinmiyor";
 
 
-            // NICKNAME DEĞİŞTİR
-
             let member;
 
             try {
@@ -1291,8 +1294,6 @@ client.on(
 
             });
 
-
-            // PERSONELE DM
 
             try {
 
